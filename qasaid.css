@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'me_quran';
+    src: url('fonts/me_quran-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'kanzalmarjaan';
+    src: url('fonts/Kanz-al-Marjaan.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+.bayt {
+    margin-bottom: 1.5rem;
+    /*display: block;
+    clear: both;*/
+}
+
+.misra {
+    width: 22rem;
+}
+
+.myright {
+    /*float: right;*/
+    margin-left: auto;
+}
+
+.myleft {
+    /*float: left;*/
+    margin-right: auto;
+}
