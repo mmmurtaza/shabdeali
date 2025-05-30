@@ -23,8 +23,9 @@ if (isset($_POST['title'])) {
     $mywdate = sanitize($_POST['wdate']);
     $mysinf= sanitize($_POST['Sinf']);
     $mymiqaat = sanitize($_POST['Miqaat']);
+    $myabyat_cnt = sanitize($_POST['abyatcount']);
 
-    $sql2 = "UPDATE nazamo SET Head='$myhead',qafiya='$myqafiya',Lang='$mylang',w_date='$mywdate',Sinf='$mysinf',Miqaat='$mymiqaat',last_updated=NOW(),remarks='$myremarks' WHERE id = '$id';";
+    $sql2 = "UPDATE nazamo SET Head='$myhead',qafiya='$myqafiya',Lang='$mylang',w_date='$mywdate',Sinf='$mysinf',Miqaat='$mymiqaat',last_updated=NOW(),remarks='$myremarks', abyat_count='$myabyat_cnt' WHERE id = '$id';";
 
     // echo $sql2;
 
@@ -470,6 +471,18 @@ if (isset($_POST['title'])) {
                     </div>
                         
                      <!-- / bija elements  2 -->
+
+
+                     <div class="row">
+                         <div class="col-4">
+                            <label for="abyatcount">Abyat Count</label>
+                            <input type="text" name="abyatcount" id="abyatcount" class="form-control" placeholder="abyat count"
+                            value=<?php echo $nazm['abyat_count']; ?> >
+
+                        </div>
+
+
+                     </div>
                     
                     <p></p>
                     <textarea name="markdown" id="markdown" rows="20" class="form-control" onchange="update()"
@@ -506,6 +519,18 @@ if (isset($_POST['title'])) {
     
                         </div>
                     </div><!-- /row -->
+
+                    <div class="row">
+                        
+                        <div class="col-4">
+                            
+                        </div>
+                        <div class="col-4">
+                            
+                        </div>
+
+                    </div>
+                    <!-- /row -->
 
 
             </div>
@@ -635,7 +660,7 @@ if (isset($_POST['title'])) {
             qasida = qasida.replace(/\n\s*\n/g, '\n');
 
             var splittedLines = qasida.split('\n');
-            // splittedLines.pop()
+
 
             var parent = document.querySelector("#qasaidarea");
             let divheight = 240 / 15

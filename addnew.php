@@ -4,34 +4,46 @@ if(!isset($_SESSION['authorized']) || $_SESSION['authorized'] != true ) {
     header('Location:/shabdeali/index.php');
 }
 
+$user_email = $_SESSION['email'];
+
+// echo "Welcome, " . htmlspecialchars($user_email) . "!<br>";
+
 require_once 'db_setup.php';
-
-$id = 1;
-$sql = "Select * from nazamo where id='$id'";
-$nazm = db_query_one($sql);
-
-// if (isset($_POST['title'])) {
-//     $id = sanitize($_POST['id']);
-//     $myhead = sanitize($_POST['title']);
-//     $myqafiya = sanitize($_POST['qafiya']);
-//     $mylang = sanitize($_POST['lang']);
-//     $myremarks= sanitize($_POST['remarks']);
-
-//     $mywdate = sanitize($_POST['wdate']);
-//     $mysinf= sanitize($_POST['Sinf']);
-//     $mymiqaat = sanitize($_POST['Miqaat']);
-
-//     $sql2 = "UPDATE nazamo SET Head='$myhead',qafiya='$myqafiya',Lang='$mylang',w_date='$mywdate',Sinf='$mysinf',Miqaat='$mymiqaat',last_updated=NOW(),remarks='$myremarks' WHERE id = '$id';";
-
-//     // echo $sql2;
-
-//     $ret = db_execute($sql2);
-
-//     // $sql = "Select * from nazamo where id='$id'";
-//     // $nazm = db_query_one($sql);
-// }
+// print_r($_POST);
+// Array ( [title] => رأينا روضة غنأ [qafiya] => ن [lang] => ARB [abyatcount] => 18 [remarks] => [markdown] => رأينا روضة غنأ* فزالت كرب عنا وطير الفكر في اشجا*رها من فرحة غنى رأيناكوكب الافق* اذا ما الليل قد جنا فانفسنا برؤيته *المنيرة نحن زينا ايا جامع افنان الـ*ـعلى فنا تلى فنا مودتك الصميمة في* قلوب نحن اسكنا سمعناه ينادينا * لايمان فآمنا وصوت الملك القدس*ي في آذاننا رنا به انى يقاس عد*وه في فضله انى واين زئير ليث من* ذباب حينما طنا ووحد سيف دين ر*بنا لكن به ثنى اتى سيفا على اعدا*ئه غاراته شنا لقد نثني اعنتنا* اليه الخطب لو عنا يقينا قد تمسكنا*به والله لا ظنا تقبل من عبيدك تهـ*ـنيات اليوم ذا منا ايا موسى الهدى انزل*علينا السلوى والمنا حسينا حين يذكره *بكى المؤمن بل انا فطال بقائه مانحـ*ـوطف زائر حنا [wdate] => [Sinf] => [Miqaat] => )
+// $highest_id = $conn->query("SELECT MAX(id) FROM nazamo")->fetch_row()[0];
+// echo "Highest ID: " . $highest_id . "<br>";
 
 
+if (isset($_POST['title'])) {
+    $highest_id = $conn->query("SELECT MAX(id) FROM nazamo")->fetch_row()[0];
+    $myid = $highest_id + 1; // Incrementing the highest ID by 1
+    
+    $myhead = sanitize($_POST['title']);
+    $myqafiya = sanitize($_POST['qafiya']);
+    $mylang = sanitize($_POST['lang']);
+    $myabyatcount = sanitize($_POST['abyatcount']);
+    $myremarks= sanitize($_POST['remarks']);
+
+    $mywdate = sanitize($_POST['wdate']);
+    $mysinf= sanitize($_POST['Sinf']);
+    $mymiqaat = sanitize($_POST['Miqaat']);
+
+    $markdown = sanitize($_POST['markdown']);
+
+    $sql2 = "INSERT INTO nazamo(Id, Head, Mawad, qafiya, Lang, abyat_count, w_date, Sinf, Miqaat, last_updated, remarks, last_updated_by) VALUES ('$myid','$myhead','$markdown','$myqafiya','$mylang','$myabyatcount','$mywdate','$mysinf','$mymiqaat',NOW(),'$myremarks','$user_email')";
+
+    // echo $sql2;
+
+    $ret = db_execute($sql2);
+
+    if ($ret) {
+        echo "New record created successfully<br>";
+        echo "View the record <a target='_blank' href='edit.php?id=$myid'>here ($myid)</a>.";
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -63,8 +75,6 @@ $nazm = db_query_one($sql);
 
     <script src="https://cdn.jsdelivr.net/npm/markdown-it-attrs@4.1.4/markdown-it-attrs.browser.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-    <script src="bootstrap-autocomplete.js"></script>
 
 
     <meta charset="utf-8">
@@ -465,7 +475,7 @@ $nazm = db_query_one($sql);
             </div><!-- /col -->
         </div><!-- /row Search-->
 
- <div class="mycontainer">  
+ <div class="mycontainer my-3">  
 
         <input type="text" id="searchBox" placeholder="Search for items..." aria-label="Search items">
 
@@ -493,7 +503,7 @@ $nazm = db_query_one($sql);
                         <div class="form-group mb-2">
                             
                          
-                            <input type="text" name="title" id="title" class="form-control" placeholder="Title" onchange="titleSetter()" value="<?php echo $nazm['Head'];?>">
+                            <input type="text" name="title" id="title" class="form-control" placeholder="Title" required onchange="titleSetter()" value="<?php echo '';?>">
                         </div>
                         </div>
                     </div><!-- row -->
@@ -502,73 +512,160 @@ $nazm = db_query_one($sql);
                    
                     <!-- bija elements 1 -->
                     <div class="row align-items-center">
-                        <div class="col-2">
+                        <div class="col-3">
                             <div class="form-group">
                                 
                             <label for="qafiya">Qafiya</label>
-                            <input type="text" name="qafiya" id="qafiya" class="form-control" value="<?php echo $nazm['qafiya']; ?>">
+                            <input type="text" name="qafiya" required id="qafiya" class="form-control" value="<?php echo '' ?>">
                         </div>
 
                         </div>
-                        <div class="col-2">
+                        <div class="col-3">
                             <label for="qafiya">Lang</label>
-                            <input type="text" name="lang" id="lang" class="form-control" value="<?php echo $nazm['Lang']; ?>">
+                            <select class="form-control" name="lang" id="lang">
+                                <option value="URD">Urdu</option>
+                                <option value="ARB">Arabic</option>
+                                <option value="LSD">Lisan ud Dawat</option>
+                                <option value="FARSI">Farsi</option>
+                            </select>
                         </div>
 
-                        <div class="col-6">
+                         <div class="col-2">
+                            <label for="abyatcount">Abyt</label>
+                            <input type="text" name="abyatcount" id="abyatcount" class="form-control" placeholder="abyat count"
+                            value=<?php echo ''; ?> >
+
+                        </div>
+
+                        <div class="col-4">
                             <label for="remarks">Remarks</label>
-                            <input type="text" name="remarks" id="remarks" class="form-control" value="<?php echo $nazm['remarks']; ?>">
+                            <input type="text" name="remarks" id="remarks" class="form-control" value="<?php echo ''; ?>">
                         </div>
 
-                        <div class="col-2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-
-                        </div>
                     </div>
                         
                      <!-- / bija elements  1 -->
 
                    
+                    
+                    <p></p>
+                    <textarea name="markdown" id="markdown" rows="12" class="form-control" onchange="update()"
+                    style="height:-webkit-fill-available;"><?php echo '' ?> </textarea>
+                    
+                    <p></p>
 
 
-                   <!-- bija elements 2 -->
+                    
+                <div class="row">
+                    <!-- <div class="col-2">
+
+                        <button onclick="saveAJAX()" class="btn btn-success" id="save">
+                            <div><img
+                            src="https://img.icons8.com/ios/50/null/save--v1.png"></div>
+                        </button>
+                    
+                    </div> -->
+                    <!-- <div class="col-2">
+                        <button class="btn btn-success" type="button" onclick="addStar()">Add Star</button>
+                    </div> -->
+
+                    <div class="col-2">
+                        <button class="btn btn-success" type="button" onclick="removeQasida()">Rem Qash</button>
+                    </div>
+
+                    <div class="col-2">
+                        <button class="btn btn-success" type="button" onclick="updateAbyatCount()">Count Abyat</button>
+                    </div>
+
+                    <div class="col-2">
+                        <button class="btn btn-success" type="button" onclick="updateToUnicode()">To Uni code</button>
+                    </div>
+
+                    
+
+
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+
+                    </div>
+
+                </div>
+                <!-- /row -->
+                    
+
+                    
+
+                    <script>
+                        // function addStar() {
+                        //     arabicText = $('#markdown').val();
+                        //     cleanedText = arabicText.replace(/ـــــ/g, 'ـ*ـ');
+                        //     cleanedText = cleanedText.replace(/     /g, ' * ');
+                        //     $('#markdown').val(cleanedText);
+                        // }
+                        function removeQasida() {
+                            arabicText = $('#markdown').val();
+                            cleanedText = arabicText.replace(/ـ/g, '');
+                            cleanedText = cleanedText.replace(/  /g, ' ');
+                            $('#markdown').val(cleanedText);
+                        }
+
+                        function updateAbyatCount(){
+                            var qasida = document.querySelector("#markdown").value
+                            qasida = qasida.replace(/\*/g, '\n');
+                            qasida = qasida.replace(/\n\s*\n/g, '\n');
+                            var splittedLines = qasida.split('\n');
+                            $('#abyatcount').val((splittedLines.length/2));
+                        }
+
+                        function toUnicode(myRetText) {
+                            myRetText = myRetText.replaceAll("؛", "چھے");
+                            myRetText = myRetText.replaceAll("سسس", "سے");
+                            myRetText = myRetText.replaceAll("كك", "گ");
+                            myRetText = myRetText.replaceAll("طط", "ں");
+                            myRetText = myRetText.replaceAll("ثث", "پ");
+                            myRetText = myRetText.replaceAll("حح", "چ");
+                            myRetText = myRetText.replaceAll("رٌ", "ڑ");
+                            myRetText = myRetText.replaceAll("دٌ", "ڈ");
+                            myRetText = myRetText.replaceAll("ضض", "ٹ");
+                            myRetText = myRetText.replaceAll("سس", "ے");
+                            return myRetText;
+                        }
+
+                        function updateToUnicode() {
+                            var myRetText = document.querySelector("#markdown").value;
+                            myRetText = toUnicode(myRetText);
+                            document.querySelector("#markdown").value = myRetText;
+                        }
+
+
+                    </script>
+
+
+                                   <!-- bija elements 2 -->
                     <div class="row align-items-center">
                         <div class="col-4">
                             <div class="form-group">
                                 
                                 <label for="wdate">Writ Date</label>
-                                <input type="text" name="wdate" id="wdate" class="form-control" value="<?php echo $nazm['w_date']; ?>">
+                                <input type="text" name="wdate" id="wdate" class="form-control" value="<?php echo ''; ?>">
                             </div>
 
                         </div>
                         <div class="col-4">
                             <label for="Sinf">Sinf</label>
-                            <input type="text" name="Sinf" id="Sinf" class="form-control" value="<?php echo $nazm['Sinf']; ?>">
+                            <input type="text" name="Sinf" id="Sinf" class="form-control" value="<?php echo ''; ?>">
                         </div>
 
                         <div class="col-4">
                             <label for="Miqaat">Miqaat</label>
-                            <input type="text" name="Miqaat" id="Miqaat" class="form-control" value="<?php echo $nazm['Miqaat']; ?>">
-
-                            <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
+                            <input type="text" name="Miqaat" id="Miqaat" class="form-control" value="<?php echo ''; ?>">
                         </div>
 
                     </div>
                         
                      <!-- / bija elements  2 -->
-                    
-                    <p></p>
-                    <textarea name="markdown" id="markdown" rows="12" class="form-control" onchange="update()"
-                    style="height:-webkit-fill-available;"><?php echo $nazm['Mawad'] ?> </textarea>
-                    
-                    <p></p>
+                      
                 </form>
-
-                    <button onclick="saveAJAX()" class="btn btn-success col-2" id="save"
-                    style="text-align: center;">
-                    <div style="justify-content:center;display: flex;"><img
-                            src="https://img.icons8.com/ios/50/null/save--v1.png"></div>
-                    </button>
 
                     <!-- font and font size -->
                     <div class="row">
@@ -652,17 +749,8 @@ $nazm = db_query_one($sql);
             if (document.querySelector("#qasaidarea").children) {
                 document.querySelector("#qasaidarea").innerHTML = ""
             }
-                // markdown = md.render(document.querySelector("#markdown").value)
-
-
-                // markdown = document.querySelector("#markdown").value
-                // markdown = markdown.slice(3, markdown.length);
-                // markdown = markdown.replace(/\*/g, '\n');
-                // markdown = markdown.replace(/\n\s*\n/g, '\n');
-                // splittedLines = markdown.split('\n');
-                begin()
-            
-            // document.querySelector("#qasaidarea").innerHTML = markdown
+            begin()
+            updateAbyatCount();
         }
 
         function gettemplate() {
@@ -705,6 +793,8 @@ $nazm = db_query_one($sql);
             parent.append(div);
         }
 
+
+
         function begin() {
 
             // setting functions required variables
@@ -721,7 +811,6 @@ $nazm = db_query_one($sql);
             qasida = qasida.replace(/\n\s*\n/g, '\n');
 
             var splittedLines = qasida.split('\n');
-            // splittedLines.pop()
 
             var parent = document.querySelector("#qasaidarea");
             let divheight = 240 / 15
@@ -729,27 +818,18 @@ $nazm = db_query_one($sql);
             let pageno = 1
             let arrangement = gettemplate()
             for (var i = 0; i < splittedLines.length; i++) {
-
                 if (i % misraPerBait == 0) {
-
                     if (i % misraperpage == 0) {
                         [parent, pageno] = new_page(parent, pageno)
-
                     }
-
                     new_bait(parent, splittedLines, i, divheight, arrangement)
                 }
-
             }
             changefont()
             // setmargins()
             titleSetter()
-            div = document.createElement("div")
-            div.classList.add('name')
-            parent.append(div)
-            // nameAdder()
-            document.querySelector('button').style.display = 'block'
-            document.querySelector('#save').style.display = 'block'
+            // document.querySelector('button').style.display = 'block'
+            // document.querySelector('#save').style.display = 'block'
             masterdict.text = markdown
         }
 
@@ -842,7 +922,7 @@ $nazm = db_query_one($sql);
 
         function saveAJAX(){
             let myData = {};
-            myData.id = <?php echo $id ?>;
+            // myData.id = <?php echo '' ?>;
             myData.Mawad = $("#markdown").val();
             console.log(myData);
             $.ajax({
@@ -852,6 +932,7 @@ $nazm = db_query_one($sql);
                 success: function(ret){ console.log(ret)}
             });
         }
+
 
 
 
