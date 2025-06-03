@@ -78,7 +78,7 @@ require_once 'functions.php';
 
 
 		<div class="row">
-			<div class="col-md-6 col-sm-12 my-3">
+			<div class="col-md-4 col-sm-12 my-3">
 				<div class="card" id="arabic">
 				  <div class="card-header">
 				    By Updated
@@ -88,7 +88,7 @@ require_once 'functions.php';
 				</div>
 			</div>
 			
-			<div class="col-md-6 col-sm-12 my-3">
+			<div class="col-md-4 col-sm-12 my-3">
 				<div class="card" id="arabic">
 				  <div class="card-header">
 				    By Sinf
@@ -97,6 +97,19 @@ require_once 'functions.php';
 
 				</div>
 			</div>
+
+
+
+			<div class="col-md-4 col-sm-12 my-3">
+				<div class="card" id="arabic">
+				  <div class="card-header">
+				    Doubled
+				  </div>
+				  		<?php echo get_doubled_links(); ?>
+
+				</div>
+			</div>
+
 			
 		</div>
 		<!-- /row -->
