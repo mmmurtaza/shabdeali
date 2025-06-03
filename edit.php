@@ -3,6 +3,7 @@ session_start();
 if(!isset($_SESSION['authorized']) || $_SESSION['authorized'] != true ) {
     header('Location:/shabdeali/index.php');
 }
+$user_email = $_SESSION['email'];
 
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -24,8 +25,9 @@ if (isset($_POST['title'])) {
     $mysinf= sanitize($_POST['Sinf']);
     $mymiqaat = sanitize($_POST['Miqaat']);
     $myabyat_cnt = sanitize($_POST['abyatcount']);
+    $mawad = sanitize($_POST['markdown']);
 
-    $sql2 = "UPDATE nazamo SET Head='$myhead',qafiya='$myqafiya',Lang='$mylang',w_date='$mywdate',Sinf='$mysinf',Miqaat='$mymiqaat',last_updated=NOW(),remarks='$myremarks', abyat_count='$myabyat_cnt' WHERE id = '$id';";
+    $sql2 = "UPDATE nazamo SET Head='$myhead',qafiya='$myqafiya',Lang='$mylang',w_date='$mywdate',Sinf='$mysinf',Miqaat='$mymiqaat',last_updated=NOW(),remarks='$myremarks', abyat_count='$myabyat_cnt', last_updated_by='$user_email', Mawad='$mawad' WHERE id = '$id';";
 
     // echo $sql2;
 
