@@ -61,7 +61,7 @@ require_once 'functions.php';
 </head>
 <body>
 
-	<div class="container-xl col-lg-8 mx-auto p-3 py-md-5">
+<div class="container-xl col-lg-8 mx-auto p-3 py-md-5">
 
 		<header class="d-flex align-items-center pb-3 mb-5 border-bottom">
 		    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
@@ -69,52 +69,65 @@ require_once 'functions.php';
 		      <span class="fs-4">Shaikh Abdeali Shaikh Qamruddin Madarwala</span>
 		    </a>
 		</header>
-<?php include 'nav.php'; ?>
+	<?php include 'nav.php'; ?>
 
-		<div class="row">
+	<div class="row">
 			
-		</div>
-		<!-- /row -->
-
-
-		<div class="row">
-			<div class="col-md-4 col-sm-12 my-3">
-				<div class="card" id="arabic">
-				  <div class="card-header">
-				    By Updated
-				  </div>
-				  		<?php echo getByUpdated(); ?>
-
-				</div>
-			</div>
-			
-			<div class="col-md-4 col-sm-12 my-3">
-				<div class="card" id="arabic">
-				  <div class="card-header">
-				    By Sinf
-				  </div>
-				  		<?php echo getSinf(); ?>
-
-				</div>
-			</div>
-
-
-
-			<div class="col-md-4 col-sm-12 my-3">
-				<div class="card" id="arabic">
-				  <div class="card-header">
-				    Doubled
-				  </div>
-				  		<?php echo get_doubled_links(); ?>
-
-				</div>
-			</div>
-
-			
-		</div>
-		<!-- /row -->
 	</div>
-	<!-- /container -->
+	<!-- /row -->
+
+
+	<div class="row">
+		<div class="col-md-4 col-sm-12 my-3">
+			<div class="card" id="arabic">
+				<div class="card-header">
+				Empty Qafiya
+				</div>
+					<?php echo get_empty_qafiya(); ?>
+
+			</div>
+		</div>
+			
+		<div class="col-md-4 col-sm-12 my-3">
+			<div class="card" id="arabic">
+				<div class="card-header">
+				Doubled
+				</div>
+					<?php echo get_doubled_links(); ?>
+			</div>
+		</div>
+
+		<div class="col-md-4 col-sm-12 my-3">
+			<div class="card" id="arabic">
+				<div class="card-header">
+				By Sinf
+				</div>
+
+					<?php echo getSinf(); ?>
+
+
+			</div>
+		</div>
+	</div>
+	<!-- /row -->
+
+	<div class="row">
+		<div class="col-md-4 col-sm-12 my-3">
+			<div class="card" id="arabic">
+				<div class="card-header">
+				By Updated
+				</div>
+					<?php echo getByUpdated(); ?>
+
+			</div>
+		</div>
+
+
+	</div>
+	<!-- /row -->
+	
+</div>
+<!-- /container -->
 	
 </body>
 </html>

@@ -133,3 +133,18 @@ function get_doubled_links(){
 	$html .= "</ul>";
 	return $html;
 }
+
+function get_empty_qafiya(){
+	$sql = "SELECT id, Head FROM `nazamo` where qafiya is null or qafiya = '' ORDER BY Id DESC";
+	$rec = db_query_all($sql);
+
+	$html = "<ul class='list-group list-group-flush'>";
+	for ($i=0; $i < count($rec); $i++) { 
+		$id = $rec[$i]['id'];
+		$head = $rec[$i]['Head'];
+		$q = $i+1;
+		$html .= "<li class='list-group-item'>$q. <a href='view.php?id=$id'>$head </a></li>";
+	}
+	$html .= "</ul>";
+	return $html;
+}
