@@ -3,7 +3,7 @@
 require_once 'db_setup.php';
 
 function getArabiLinks(){
-	$sql = "SELECT id, Head, qafiya from nazamo where Lang='ARB' ORDER by qafiya, Head";
+	$sql = "SELECT id, Head, qafiya, abyat_count from nazamo where Lang='ARB' ORDER by qafiya, Head";
 	$rec = db_query_all($sql);
 
 	$html = "<ul class='list-group list-group-flush'>";
@@ -11,38 +11,43 @@ function getArabiLinks(){
 		$id = $rec[$i]['id'];
 		$head = $rec[$i]['Head'];
 		$qafiya = $rec[$i]['qafiya'];
+		$abyat_count = $rec[$i]['abyat_count'];
 		$q = $i+1;
-		$html .= "<li class='list-group-item'>$q. <a href='view.php?id=$id'>$head </a> - ($qafiya)</li>";
+		$html .= "<li class='list-group-item'>$q. <a href='view.php?id=$id'>$head </a> - ($qafiya)-($abyat_count)</li>";
 	}
 	$html .= "</ul>";
 	return $html;
 }
 
 function getLSDLinks(){
-	$sql = "SELECT id, Head, qafiya from nazamo where Lang='LSD' ORDER by Head";
+	$sql = "SELECT id, Head, qafiya, abyat_count from nazamo where Lang='LSD' ORDER by qafiya, Head";
 	$rec = db_query_all($sql);
 
 	$html = "<ul class='list-group list-group-flush'>";
 	for ($i=0; $i < count($rec); $i++) { 
 		$id = $rec[$i]['id'];
 		$head = $rec[$i]['Head'];
+		$qafiya = $rec[$i]['qafiya'];
+		$abyat_count = $rec[$i]['abyat_count'];
 		$q = $i+1;
-		$html .= "<li class='list-group-item'>$q. <a href='view.php?id=$id'>$head </a></li>";
+		$html .= "<li class='list-group-item'>$q. <a href='view.php?id=$id'>$head </a>- ($qafiya)-($abyat_count)</li>";
 	}
 	$html .= "</ul>";
 	return $html;
 }
 
 function getURDLinks(){
-	$sql = "SELECT id, Head, qafiya from nazamo where Lang='URD' ORDER by Head";
+	$sql = "SELECT id, Head, qafiya, abyat_count from nazamo where Lang='URD' ORDER by qafiya, Head";
 	$rec = db_query_all($sql);
 
 	$html = "<ul class='list-group list-group-flush'>";
 	for ($i=0; $i < count($rec); $i++) { 
 		$id = $rec[$i]['id'];
 		$head = $rec[$i]['Head'];
+		$qafiya = $rec[$i]['qafiya'];
+		$abyat_count = $rec[$i]['abyat_count'];
 		$q = $i+1;
-		$html .= "<li class='list-group-item'>$q. <a href='view.php?id=$id'>$head </a></li>";
+		$html .= "<li class='list-group-item'>$q. <a href='view.php?id=$id'>$head </a>- ($qafiya)-($abyat_count)</li>";
 	}
 	$html .= "</ul>";
 	return $html;
